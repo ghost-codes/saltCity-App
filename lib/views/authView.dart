@@ -1,5 +1,8 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
+
 import 'package:saltcity_app/core/viewModels/authViewModel.dart';
 import 'package:saltcity_app/views/baseView.dart';
 import 'package:saltcity_app/views/widgets/authSreenWidgets.dart';
@@ -10,6 +13,19 @@ class AuthView extends StatefulWidget {
 }
 
 class _AuthViewState extends State<AuthView> {
+  KeyboardVisibilityNotification _keyboardVisibility =
+      KeyboardVisibilityNotification();
+
+  void initState() {
+    super.initState();
+
+    _keyboardVisibility.addNewListener(
+      onChange: (bool visible) {
+        print(visible);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseView<AuthViewModel>(
@@ -18,6 +34,7 @@ class _AuthViewState extends State<AuthView> {
         model.windowWidth = MediaQuery.of(context).size.width;
       },
       builder: (context, model, child) {
+        model.context = context;
         return Scaffold(
           body: Stack(
             children: [
