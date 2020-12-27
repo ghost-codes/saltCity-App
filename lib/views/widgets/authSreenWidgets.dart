@@ -1,5 +1,6 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:saltcity_app/core/viewModels/authViewModel.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -156,16 +157,19 @@ class InputFields extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Stack(
-        children: <Widget>[
-          createAccount(),
-          login(),
-        ],
-      ),
+      child: KeyboardVisibilityBuilder(
+          builder: (context, bool keyboardVisibility) {
+        return Stack(
+          children: <Widget>[
+            createAccount(keyboardVisibility),
+            login(keyboardVisibility),
+          ],
+        );
+      }),
     );
   }
 
-  Widget login() {
+  Widget login(bool keyboardVisibility) {
     return AnimatedContainer(
       // height: model.windowHeight * 0.72,
       curve: Curves.easeInOut,
@@ -179,7 +183,8 @@ class InputFields extends StatelessWidget {
             topRight: Radius.circular(20),
             topLeft: Radius.circular(20),
           )),
-      transform: Matrix4.translationValues(0, model.loginHeight, 0),
+      transform: Matrix4.translationValues(
+          0, keyboardVisibility ? 40 : model.loginHeight, 0),
       child: Stack(
         children: <Widget>[
           Container(
@@ -294,7 +299,7 @@ class InputFields extends StatelessWidget {
     );
   }
 
-  Widget createAccount() {
+  Widget createAccount(bool keyboardVisibility) {
     return AnimatedContainer(
       height: model.windowHeight * 0.7,
       curve: Curves.easeInOut,
@@ -308,8 +313,8 @@ class InputFields extends StatelessWidget {
             topRight: Radius.circular(10),
             topLeft: Radius.circular(10),
           )),
-      transform:
-          Matrix4.translationValues(model.signupShift, model.signUpHeight, 0),
+      transform: Matrix4.translationValues(
+          model.signupShift, keyboardVisibility ? 30 : model.signUpHeight, 0),
       child: Container(
         child: Stack(
           children: <Widget>[

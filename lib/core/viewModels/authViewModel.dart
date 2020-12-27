@@ -66,9 +66,7 @@ class AuthViewModel extends BaseModel {
         firstFormOffset = 0;
         break;
       case 1:
-        signUpHeight = !(MediaQuery.of(context).viewInsets.bottom == 0.0)
-            ? 20
-            : windowHeight * 0.30;
+        signUpHeight = windowHeight * 0.30;
         signupOpacity = 1;
         signupWidth = windowWidth;
         loginHeight = windowHeight;
@@ -81,17 +79,11 @@ class AuthViewModel extends BaseModel {
       case 3:
         firstFormOffset = windowWidth;
         secondFormOffset = 0;
-        signUpHeight = !(MediaQuery.of(context).viewInsets.bottom == 0.0)
-            ? 20
-            : windowHeight * 0.30;
+        signUpHeight = windowHeight * 0.30;
         break;
       case 2:
-        signUpHeight = (MediaQuery.of(context).viewInsets.bottom == 0.0)
-            ? 20
-            : windowHeight * 0.25;
-        loginHeight = !(MediaQuery.of(context).viewInsets.bottom == 0.0)
-            ? 30
-            : windowHeight * 0.28;
+        signUpHeight = windowHeight * 0.25;
+        loginHeight = windowHeight * 0.28;
         signupWidth = windowWidth - 40;
         _GetStartedOffset = windowHeight;
         signupOpacity = 0.7;

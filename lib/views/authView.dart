@@ -1,7 +1,8 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 // import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
+// import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 import 'package:saltcity_app/core/viewModels/authViewModel.dart';
 import 'package:saltcity_app/views/baseView.dart';
@@ -13,17 +14,8 @@ class AuthView extends StatefulWidget {
 }
 
 class _AuthViewState extends State<AuthView> {
-  KeyboardVisibilityNotification _keyboardVisibility =
-      KeyboardVisibilityNotification();
-
   void initState() {
     super.initState();
-
-    _keyboardVisibility.addNewListener(
-      onChange: (bool visible) {
-        print(visible);
-      },
-    );
   }
 
   @override
