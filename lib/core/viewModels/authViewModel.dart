@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:saltcity_app/core/enums.dart';
 // import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:saltcity_app/core/models/userModel.dart';
+import 'package:saltcity_app/core/services/AuthenticationService.dart';
 import 'package:saltcity_app/core/viewModels/baseModel.dart';
+import 'package:saltcity_app/locator.dart';
 
 class AuthViewModel extends BaseModel {
+  final formkey1 = new GlobalKey<FormState>();
+  final formkey2 = new GlobalKey<FormState>();
+  final loginFormKey = new GlobalKey<FormState>();
+  AuthenticationService _authService = sl<AuthenticationService>();
+
+  String loginErrorMessage = '';
+
   BuildContext context;
   UserModel userModel = UserModel();
-  bool _keyboard = false;
+
+  Map<String, String> loginModel = {};
 
   int _pageState = 0;
   int get pageState => _pageState;
@@ -34,12 +45,11 @@ class AuthViewModel extends BaseModel {
     return null;
   }
 
-  final formkey1 = new GlobalKey<FormState>();
-  final formkey2 = new GlobalKey<FormState>();
-
   void signupNext() {
+    // setState(ViewState.Idle);
     final form = formkey1.currentState;
 
+    // setState();
     if (form.validate()) {
       form.save();
       setPageState(3);
@@ -47,10 +57,30 @@ class AuthViewModel extends BaseModel {
     notifyListeners();
   }
 
-  keyboardVisible(visible) {
-    _keyboard = visible;
-    print(_keyboard);
-    notifyListeners();
+  Future<void> login() async {
+    final form = loginFormKey.currentState;
+    // try {
+    if (form.validate()) {
+      form.save();
+      setState(ViewState.Busy);
+      bool isSuccessful = await _authService.login(loginModel);
+      setState(ViewState.Idle);
+      if (isSuccessful) {
+        //Navigate to HomeView
+        form.reset();
+        print('HomeView');
+        loginErrorMessage = '';
+      } else {
+        loginErrorMessage = 'Invalid Credentials';
+        notifyListeners();
+      }
+    }
+    // }
+    // catch (err) {
+    //   setState(ViewState.Idle);
+    //   loginErrorMessage = 'Bad or No Internet';
+    //   notifyListeners();
+    // }
   }
 
   setPageState(int pageState) {

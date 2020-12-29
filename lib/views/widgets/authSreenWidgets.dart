@@ -1,6 +1,8 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:saltcity_app/core/enums.dart';
+import 'package:saltcity_app/core/utils/colors.dart';
 import 'package:saltcity_app/core/viewModels/authViewModel.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -67,7 +69,7 @@ class WelcomeScreen extends StatelessWidget {
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: Color(0xffff354F52),
+                  color: LColor.primaryColor,
                   borderRadius: BorderRadius.all(Radius.circular(32))),
               child: FlatButton(
                 onPressed: () {
@@ -211,85 +213,113 @@ class InputFields extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    child: Form(
-                      child: Column(
-                        children: <Widget>[
-                          TextFormField(
-                            decoration: InputDecoration(
-                                border: UnderlineInputBorder(),
-                                enabledBorder: UnderlineInputBorder(),
-                                labelText: "Name",
-                                icon: Icon(Icons.person)),
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                border: UnderlineInputBorder(),
-                                labelText: "Phone",
-                                icon: Icon(Icons.phone_android)),
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              icon: Icon(Icons.email),
-                              labelText: "Email",
-                              border: UnderlineInputBorder(),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                color: Color(0xffff354F52),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(32))),
-                            child: FlatButton(
-                              onPressed: () {
-                                model
-                                    .setPageState(model.pageState == 0 ? 1 : 0);
-                              },
-                              child: Text(
-                                "Login",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
+                  model.state == ViewState.Busy
+                      ? Padding(
+                          padding: EdgeInsets.only(top: 100.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        )
+                      : Column(
+                          children: [
+                            model.loginErrorMessage.length == 0
+                                ? SizedBox.shrink()
+                                : Text(
+                                    model.loginErrorMessage,
+                                    style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 18,
+                                        color: LColor.errorColor),
+                                  ),
+                            Container(
+                              child: Form(
+                                key: model.loginFormKey,
+                                child: Column(
+                                  children: <Widget>[
+                                    TextFormField(
+                                      onSaved: (String val) {
+                                        model.loginModel['username'] = val;
+                                      },
+                                      validator: (val) {
+                                        return model.nullValidate(val);
+                                      },
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      decoration: InputDecoration(
+                                          border: UnderlineInputBorder(),
+                                          enabledBorder: UnderlineInputBorder(),
+                                          labelText: "Email \\ Phone",
+                                          icon: Icon(Icons.person)),
+                                    ),
+                                    TextFormField(
+                                      onSaved: (String val) {
+                                        model.loginModel['password'] = val;
+                                      },
+                                      validator: (val) {
+                                        return model.nullValidate(val);
+                                      },
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      obscureText: true,
+                                      decoration: InputDecoration(
+                                          border: UnderlineInputBorder(),
+                                          labelText: "Password",
+                                          icon: Icon(Icons.lock)),
+                                    ),
+                                    SizedBox(
+                                      height: 40,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xffff354F52),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(32))),
+                                      child: FlatButton(
+                                        onPressed: () {
+                                          model.login();
+                                        },
+                                        child: Text(
+                                          "Login",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
                             ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 15.0, bottom: 35.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Don\'t have an account?  ',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            model.setPageState(1);
-                          },
-                          child: Text(
-                            'Sign Up',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Color(0xffff354F52),
-                              fontWeight: FontWeight.bold,
+                            Container(
+                              padding: EdgeInsets.only(top: 15.0, bottom: 35.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'Don\'t have an account?  ',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      model.setPageState(1);
+                                    },
+                                    child: Text(
+                                      'Sign Up',
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Color(0xffff354F52),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),

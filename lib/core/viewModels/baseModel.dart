@@ -8,5 +8,6 @@ class BaseModel extends ChangeNotifier {
 
   void setState(ViewState viewState) {
     _state = viewState;
+    notifyListeners();
   }
 }
